@@ -99,7 +99,20 @@ get("/") do
   # See:
   # * User docs: http://datamapper.org/docs/find.html
   # * Method docs: http://rdoc.info/github/datamapper/dm-core/DataMapper/Collection#all-instance_method
-  body(erb(:home, :locals => {:walls => walls}))
+
+  home_page_html = erb(:home, { :locals => { :walls => walls } })
+  # The `erb` method takes a template and a hash of options to create some
+  # HTML. The `:locals` key in the options hash tells `erb` to create local
+  # variables the template may reference for the key-value pairs in the hash
+  # provided to locals.
+  #
+  # Here we tell `erb` to translate the `views/home.erb` template file and
+  # provide it a local variable named `walls` with the data in the routes local
+  # variable named `walls`. We then assign the string that `erb` returns to the
+  # `home_page_html` local variable
+
+  body(home_page_html)
+  # The `body` method sets the body of the http response sent to the browser.
 end
 
 get("/walls/new") do
