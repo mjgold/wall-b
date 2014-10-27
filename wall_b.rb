@@ -10,7 +10,6 @@ end
 if ENV['RACK_ENV'] == "production"
   DataMapper.setup(:default, ENV['DATABASE_URL'])
 end
-
 # Here we're telling DataMapper to connect to the database specified by our
 # environment configuration.
 #
@@ -100,14 +99,27 @@ get("/") do
   # See:
   # * User docs: http://datamapper.org/docs/find.html
   # * Method docs: http://rdoc.info/github/datamapper/dm-core/DataMapper/Collection#all-instance_method
-  body(erb(:home, :locals => {:walls => walls}))
+
+  home_page_html = erb(:home, { :locals => { :walls => walls } })
+  # The `erb` method takes a template and a hash of options to create some
+  # HTML. The `:locals` key in the options hash tells `erb` to create local
+  # variables the template may reference for the key-value pairs in the hash
+  # provided to locals.
+  #
+  # Here we tell `erb` to translate the `views/home.erb` template file and
+  # provide it a local variable named `walls` with the data in the routes local
+  # variable named `walls`. We then assign the string that `erb` returns to the
+  # `home_page_html` local variable
+
+  body(home_page_html)
+  # The `body` method sets the body of the http response sent to the browser.
 end
 
 get("/walls/new") do
   wall = Wall.new()
   # We're going to create a new wall, since `views/new_wall.erb` requires a
-  # `@wall` instance variable to auto-fill in the form.
-  body(erb(:new_wall, :locals => {:wall => wall}))
+  # `wall` local variable to auto-fill in the form.
+  body(erb(:new_wall, { :locals => {:wall => wall} }))
 end
 
 post("/walls") do
@@ -118,17 +130,17 @@ post("/walls") do
   wall_attributes["created_at"] = DateTime.now()
   # And add in the `created_at` attribute with the current time.
 
-  @wall = Wall.create(wall_attributes)
+  wall = Wall.create(wall_attributes)
   # Now we'll *create a wall* in our database from these attributes!
   # See:
   # * User Docs for Create: http://datamapper.org/docs/create_and_destroy.html
   # * Method docs for create: http://rdoc.info/github/datamapper/dm-core/DataMapper/Model#create-instance_method
 
-  if @wall.saved?()
+  if wall.saved?()
     redirect("/")
     # If we successfuly create the wall, let's send the user back home.
   else
-    body(erb(:new_wall))
+    body(erb(:new_wall), { :locals => { :wall => wall } })
     # If we *can't* create the wall; We'll redisplay the form so the user can
     # fix any errors.
   end
