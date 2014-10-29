@@ -4,8 +4,8 @@ require 'data_mapper'
 if ENV['RACK_ENV'] != "production"
   require 'dotenv'
   Dotenv.load('.env')
-  DataMapper.setup(:default, "sqlite:wall.db")
   DataMapper::Logger.new(STDOUT, :debug)
+  DataMapper.setup(:default, "sqlite:wall.db")
 end
 
 if ENV['RACK_ENV'] == "production"
