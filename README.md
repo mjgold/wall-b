@@ -67,11 +67,11 @@ Not sure how to make this happen? The wiki should
 1. Creating [relationships][relational-databases] between [datatypes][datatypes] in
    your database.
 
-[sqlite3-install]:https://github.com/codeunion/fundamentals-of-web-development/wiki/Resources-and-Tools#sqlite
+[sqlite3-install]:http://codeunion.io/curriculum/guides/resources-and-tools/#sqlite
 [heroku-quickstart]:https://devcenter.heroku.com/articles/quickstart
-[encryption-and-decyption]:https://github.com/codeunion/web-fundamentals/wiki/Glossary#encryption
-[data]:https://github.com/codeunion/web-fundamentals/wiki/Glossary#data
-[datatypes]:https://github.com/codeunion/web-fundamentals/wiki/Glossary#datatypes
-[request]:https://github.com/codeunion/web-fundamentals/wiki/Glossary#request
-[relational-databases]:https://github.com/codeunion/web-fundamentals/wiki/Glossary#relational-databases
-[database]:https://github.com/codeunion/web-fundamentals/wiki/Glossary#database
+[encryption-and-decyption]:http://glossary.codeunion.io/encryption
+[data]:http://glossary.codeunion.io/data
+[datatypes]:http://glossary.codeunion.io/datatypes
+[request]:http://glossary.codeunion.io/request
+[relational-databases]:http://glossary.codeunion.io/relational-databases
+[database]:http://glossary.codeunion.io/database
