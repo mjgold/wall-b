@@ -1,14 +1,14 @@
 require 'sinatra'
 require 'data_mapper'
 
-if ENV['RACK_ENV'] != "production"
+if ENV['RACK_ENV'] != 'production'
   require 'dotenv'
   Dotenv.load('.env')
   DataMapper::Logger.new(STDOUT, :debug)
-  DataMapper.setup(:default, "sqlite:wall.db")
+  DataMapper.setup(:default, 'sqlite:wall.db')
 end
 
-if ENV['RACK_ENV'] == "production"
+if ENV['RACK_ENV'] == 'production'
   DataMapper.setup(:default, ENV['DATABASE_URL'])
 end
 # Here we're telling DataMapper to connect to the database specified by our
@@ -52,7 +52,7 @@ class Wall
   #  * Properties user documentation: http://datamapper.org/docs/properties.html
   #  * Method documentation: http://rdoc.info/github/datamapper/dm-core/DataMapper/Model/Property:property
 
-  property :id,          Serial
+  property :id, Serial
   # The `id` is a unique identifier for the wall. Think of it as a "Social
   # Security Number" for our walls. By using the `Serial` datatype we ensure
   # this property is unique for every single wall we insert into our database.
@@ -93,7 +93,7 @@ DataMapper.auto_upgrade!()
 # `schema` (or "structure" or "shape") matches the `DataMapper::Resource`s
 # you've defined above.
 
-get("/") do
+get('/') do
   walls = Wall.all()
   # `all` is a method provided when we `include DataMapper::Resource`. It lets
   # us retrieve every `Wall` record in our database!
@@ -116,19 +116,19 @@ get("/") do
   # The `body` method sets the body of the http response sent to the browser.
 end
 
-get("/walls/new") do
+get('/walls/new') do
   wall = Wall.new()
   # We're going to create a new wall, since `views/new_wall.erb` requires a
   # `wall` local variable to auto-fill in the form.
   body(erb(:new_wall, { :locals => {:wall => wall} }))
 end
 
-post("/walls") do
-  wall_attributes = params().fetch("wall")
+post('/walls') do
+  wall_attributes = params().fetch('wall')
   # We'll get the starting attributes for this wall from `params` that came in
   # from `views/new_wall.erb`
 
-  wall_attributes["created_at"] = DateTime.now()
+  wall_attributes['created_at'] = DateTime.now()
   # And add in the `created_at` attribute with the current time.
 
   wall = Wall.create(wall_attributes)
@@ -138,7 +138,7 @@ post("/walls") do
   # * Method docs for create: http://rdoc.info/github/datamapper/dm-core/DataMapper/Model#create-instance_method
 
   if wall.saved?()
-    redirect("/")
+    redirect('/')
     # If we successfuly create the wall, let's send the user back home.
   else
     body(erb(:new_wall), { :locals => { :wall => wall } })
