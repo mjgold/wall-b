@@ -16,9 +16,9 @@ group :development do
   #   * It doesn"t rquire you to install and run a `database server`
   #   * It stores the database as a `file` in your project directory
   #
-  # On Heroku (i.e. :production) we"re going to use the `postgres` database. Postgres is reliable,
-  # fast, supports many users accessing it at once, and is kind of a pain to get
-  # working on your local computer.
+  # On Heroku (i.e. :production) we"re going to use the `postgres` database.
+  # Postgres is reliable, fast, supports many users accessing it at once, and is
+  # kind of a pain to get working on your local computer.
   #
   # Heroku wants to skip gems like `sqlite3` that are only useful in
   # development.
@@ -44,7 +44,8 @@ group :development do
 end
 
 group :production do
-  # When we install gems locally, we"ll use `bundle install --without production`.
+  # When we install gems locally, we'll use
+  # `bundle install --without production`.
   # Why? Because the `pg` gem assumes you have a postgres server installed and
   # running on your computer. (And it"s a pain to get working!)
 
