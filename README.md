@@ -69,7 +69,7 @@ Not sure how to make this happen? The wiki should
 
 [sqlite3-install]:http://codeunion.io/curriculum/guides/resources-and-tools/#sqlite
 [heroku-quickstart]:https://devcenter.heroku.com/articles/quickstart
-[encryption-and-decyption]:http://glossary.codeunion.io/encryption
+[encryption-and-decryption]:http://glossary.codeunion.io/encryption
 [data]:http://glossary.codeunion.io/data
 [datatypes]:http://glossary.codeunion.io/datatypes
 [request]:http://glossary.codeunion.io/request
