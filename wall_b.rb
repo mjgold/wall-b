@@ -52,7 +52,7 @@ class Wall
   #  * Properties user documentation: http://datamapper.org/docs/properties.html
   #  * Method documentation: http://rdoc.info/github/datamapper/dm-core/DataMapper/Model/Property:property
 
-  property :id,          Serial
+  property :id, Serial
   # The `id` is a unique identifier for the wall. Think of it as a "Social
   # Security Number" for our walls. By using the `Serial` datatype we ensure
   # this property is unique for every single wall we insert into our database.
