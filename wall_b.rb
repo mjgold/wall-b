@@ -62,7 +62,6 @@ class Wall
   # properties can only be 255 characters long; so only use them when you don't
   # need to store a lot of words.
 
-
   property :title, String
   # This is a human-friendly name for the wall. We'll use it on the index page;
   # as well as the header of the wall page.
@@ -120,11 +119,17 @@ get('/walls/new') do
   wall = Wall.new()
   # We're going to create a new wall, since `views/new_wall.erb` requires a
   # `wall` local variable to auto-fill in the form.
-  body(erb(:new_wall, { :locals => {:wall => wall} }))
+  body(erb(:new_wall, locals: { wall: wall }))
 end
 
+get('/walls/:id') do
+  wall = Wall.get(params[:id])
+  body(erb(:show_wall, locals: { wall: wall }))
+end
+
+
 post('/walls') do
-  wall_attributes = params().fetch('wall')
+  wall_attributes = params.fetch('wall')
   # We'll get the starting attributes for this wall from `params` that came in
   # from `views/new_wall.erb`
 
