@@ -1,3 +1,11 @@
 <h2><%= wall.title %></h2>
 <h3><%= wall.description %></h3>
-<h3><%= wall.created_by %></h3>
+<p/>
+<% wall.errors.map do |error| %>
+  <%= error %>
+<% end %>
+<form action='/walls/<%= wall.id %>' method='POST'>
+  <input type='text' name='created_by'>
+  <input type='hidden' name='_method' value='delete'>
+  <button type='submit'>Destroy this wall</button>
+</form>

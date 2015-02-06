@@ -151,3 +151,14 @@ post('/walls') do
     # fix any errors.
   end
 end
+
+delete('/walls/:id') do
+  wall = Wall.get(params[:id])
+  if params[:created_by] == wall.created_by
+    wall.destroy
+    redirect('/')
+  else
+    wall.errors[:general] = "You can only delete a wall by entering the name of the wall's creator."
+    body(erb(:show_wall, locals: { wall: wall }))
+  end
+end
