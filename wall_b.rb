@@ -127,8 +127,8 @@ get('/walls/:id') do
   body(erb(:show_wall, locals: { wall: wall }))
 end
 
-
 post('/walls') do
+  puts params
   wall_attributes = params.fetch('wall')
   # We'll get the starting attributes for this wall from `params` that came in
   # from `views/new_wall.erb`
@@ -152,6 +152,20 @@ post('/walls') do
   end
 end
 
+get('/walls/:id/edit') do
+  wall = Wall.get(params[:id])
+  body(erb(:edit_wall, locals: { wall: wall }))
+end
+
+put('/walls/:id') do
+  puts params
+  wall = Wall.get(params[:id])
+  saved = wall.update(params.fetch('wall'))
+
+  wall.errors[:general] = "Edit failed" unless saved
+  redirect("walls/#{params[:id]}")
+end
+
 delete('/walls/:id') do
   wall = Wall.get(params[:id])
   if params[:created_by] == wall.created_by
@@ -160,5 +174,12 @@ delete('/walls/:id') do
   else
     wall.errors[:general] = "You can only delete a wall by entering the name of the wall's creator."
     body(erb(:show_wall, locals: { wall: wall }))
+  end
+end
+
+### Work on later
+helpers do
+  def post_or_put_route(object, prefix)
+    object.new? ? prefix : prefix + "/#{object.id}"
   end
 end

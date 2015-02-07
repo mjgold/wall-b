@@ -4,8 +4,15 @@
 <% wall.errors.map do |error| %>
   <%= error %>
 <% end %>
+
+<form action='/walls/<%= wall.id %>/edit' method='GET'>
+  <button type='submit'>Edit</button>
+</form>
+
 <form action='/walls/<%= wall.id %>' method='POST'>
-  <input type='text' name='created_by'>
+  <input type='text' name='created_by' value="Enter creator's name">
   <input type='hidden' name='_method' value='delete'>
   <button type='submit'>Destroy this wall</button>
 </form>
+
+<a href="/">Back to all walls</a>
