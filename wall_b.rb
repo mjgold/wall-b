@@ -172,7 +172,7 @@ get('/walls/:id/edit') do
   if params[:wall][:created_by] == wall.created_by
     body(erb(:edit_wall, locals: { wall: wall }))
   else
-    wall.errors[:general] = "You can only edit a wall by entering the name of the wall's creator."
+    wall.errors.add(:general, "You can only edit a wall by entering the name of the wall's creator.")
     body(erb(:show_wall, locals: { wall: wall }))
   end
 end
@@ -192,14 +192,17 @@ put('/walls/:id') do
 
   # Handle wall posts
   if post_text = params[:wall_post]
-    Post.create(wall_id: wall.id, text: post_text)
+    if post_text.empty?
+      wall.errors.add(:post, 'Your post can not be empty.')
+    else
+      Post.create(wall_id: wall.id, text: post_text)
+    end
   end
 
-  # Check for errors
-  saved = wall.save
-  wall.errors[:general] = "Edit failed" unless saved
+  ### SAVING REMOVES ERRORS HASH, ask stack overflow how to fix
+  saved = wall.save unless wall.errors.any?
 
-  redirect("walls/#{params[:id]}")
+  body(erb(:show_wall, locals: { wall: wall }))
 end
 
 delete('/walls/:id') do
@@ -207,7 +210,7 @@ delete('/walls/:id') do
   if params[:wall][:created_by] == wall.created_by
     redirect('/')
   else
-    wall.errors[:general] = "You can only delete a wall by entering the name of the wall's creator."
+    wall.errors.add(:general, "You can only delete a wall by entering the name of the wall's creator.")
     body(erb(:show_wall, locals: { wall: wall }))
   end
 end

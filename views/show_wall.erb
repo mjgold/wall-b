@@ -1,7 +1,9 @@
 <%= erb :header, locals: { title: wall.title } %>
 
-<% wall.errors.map do |error| %>
-  <%= error %>
+<% # BUG: does not get multiple errors assigned to one field name %>
+<% wall.errors.each do |error| %>
+  <%= error[0] %>
+  <br>
 <% end %>
 
 <h2><%= wall.title %></h2>
