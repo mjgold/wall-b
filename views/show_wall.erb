@@ -1,18 +1,33 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="/wall_b.css">
+</head>
+
 <h2><%= wall.title %></h2>
 <h3><%= wall.description %></h3>
+<h4><%= wall.likes %> likes</h4>
 <p/>
 <% wall.errors.map do |error| %>
   <%= error %>
 <% end %>
 
-<form action='/walls/<%= wall.id %>/edit' method='GET'>
+<br>
+
+<form id="like" action='/walls/<%= wall.id %>' method='POST'>
+  <input type='hidden' name='_method' value='put'>
+  <input type='submit' name='wall[like]' value='Like'>
+</form>
+
+<form id="edit" action='/walls/<%= wall.id %>/edit' method='GET'>
+  <input type='text' name='wall[created_by]' placeholder="Enter creator's name">
   <button type='submit'>Edit</button>
 </form>
 
-<form action='/walls/<%= wall.id %>' method='POST'>
-  <input type='text' name='created_by' value="Enter creator's name">
+<form id="destroy" action='/walls/<%= wall.id %>' method='POST'>
+  <input type='text' name='wall[created_by]' placeholder="Enter creator's name">
   <input type='hidden' name='_method' value='delete'>
   <button type='submit'>Destroy this wall</button>
 </form>
 
 <a href="/">Back to all walls</a>
+</html>

@@ -6,19 +6,19 @@
   <!-- The `[]`s in the "name" attribute here indicate that `params[:wall]` is
        going to be a hash with a key of "title" and a value of whatever the user
        puts in -->
-  <br>
+  <br><br>
 
   <label>Description:</label>
   <textarea name="wall[description]"><%= wall.description %></textarea>
   <!-- We can add even more keys to the hash that will become `params[:wall]`;
        in this case, we now have params[:wall]["description"] available in our
        route -->
-  <br>
+  <br><br>
 
   <label>Owner:</label>
   <input type="text" name="wall[created_by]" value="<%= wall.created_by %>">
-  <br>
 
+  <br><br>
   <%= "<input type='hidden' name='_method' value='put'>" unless wall.new? %>
   <button><%= wall.new? ? "Create" : "Edit" %></button>
 </form>

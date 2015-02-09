@@ -43,7 +43,6 @@ class Wall
   # type built on top of `DataMapper::Resource` comes with a bunch of additional
   # methods for storing and retrievig data with a database.
 
-
   # We're going to declare what *additional* data a `Wall` is composed of, and
   # what those `data types` are. We do this with the `property` method, kindly
   # provided to us when we `include DataMapper::Resource`.
@@ -71,7 +70,7 @@ class Wall
   # (or pages!) long; giving users the freedom to describe what the wall is for
   # to their hearts content.
 
-  property :likes, Integer
+  property :likes, Integer, default: 0
   # Let's keep track of how many people click a "Like" button for a wall. To do
   # that, we want to use the `Integer` datatype.
 
@@ -84,8 +83,8 @@ end
 # programming takes practice!
 
 
-DataMapper.finalize()
-DataMapper.auto_upgrade!()
+DataMapper.finalize
+DataMapper.auto_upgrade!
 
 # These two lines tell DataMapper that you've defined all your models; and to
 # prepare the database for writing and reading. It also makes sure the databases
@@ -93,7 +92,7 @@ DataMapper.auto_upgrade!()
 # you've defined above.
 
 get('/') do
-  walls = Wall.all()
+  walls = Wall.all
   # `all` is a method provided when we `include DataMapper::Resource`. It lets
   # us retrieve every `Wall` record in our database!
   # See:
@@ -116,7 +115,9 @@ get('/') do
 end
 
 get('/walls/new') do
-  wall = Wall.new()
+  wall = Wall.new
+  # puts wall.inspect
+  # puts wall.new?
   # We're going to create a new wall, since `views/new_wall.erb` requires a
   # `wall` local variable to auto-fill in the form.
   body(erb(:new_wall, locals: { wall: wall }))
@@ -142,7 +143,7 @@ post('/walls') do
   # * User Docs for Create: http://datamapper.org/docs/create_and_destroy.html
   # * Method docs for create: http://rdoc.info/github/datamapper/dm-core/DataMapper/Model#create-instance_method
 
-  if wall.saved?()
+  if wall.saved?
     redirect('/')
     # If we successfuly create the wall, let's send the user back home.
   else
@@ -154,21 +155,26 @@ end
 
 get('/walls/:id/edit') do
   wall = Wall.get(params[:id])
-  body(erb(:edit_wall, locals: { wall: wall }))
+  if params[:wall][:created_by] == wall.created_by
+    body(erb(:edit_wall, locals: { wall: wall }))
+  else
+    wall.errors[:general] = "You can only edit a wall by entering the name of the wall's creator."
+    body(erb(:show_wall, locals: { wall: wall }))
+  end
 end
 
 put('/walls/:id') do
-  puts params
   wall = Wall.get(params[:id])
-  saved = wall.update(params.fetch('wall'))
-
+  puts params
+  wall.likes += 1 if params[:wall][:like]
+  saved = wall.save
   wall.errors[:general] = "Edit failed" unless saved
   redirect("walls/#{params[:id]}")
 end
 
 delete('/walls/:id') do
   wall = Wall.get(params[:id])
-  if params[:created_by] == wall.created_by
+  if params[:wall][:created_by] == wall.created_by
     wall.destroy
     redirect('/')
   else
@@ -177,7 +183,6 @@ delete('/walls/:id') do
   end
 end
 
-### Work on later
 helpers do
   def post_or_put_route(object, prefix)
     object.new? ? prefix : prefix + "/#{object.id}"
