@@ -76,12 +76,27 @@ class Wall
 
   property :created_at, DateTime
   # This will let us record exacty when a wall is created.
+
+  has n, :posts
 end
 
+class Post
+  include DataMapper::Resource
+
+  property :id,       Serial
+  property :wall_id,  Integer
+  property :text,     String
+
+  belongs_to :wall
+
+  # def initialize(wall_id, text)
+  #   @wall_id = wall_id
+  #   @text = text
+  # end
+end
 
 # PHEW! That's a lot of new ideas! But don't worry; you'll get it! Understanding
 # programming takes practice!
-
 
 DataMapper.finalize
 DataMapper.auto_upgrade!
@@ -166,7 +181,16 @@ end
 put('/walls/:id') do
   wall = Wall.get(params[:id])
   puts params
+
   wall.likes += 1 if params[:wall][:like]
+
+  if post_text = params[:wall][:post_text]
+    puts "wall id: #{wall.id}"
+    puts "wall text: #{post_text}"
+
+    Post.create(wall_id: wall.id, text: post_text)
+  end
+
   saved = wall.save
   wall.errors[:general] = "Edit failed" unless saved
   redirect("walls/#{params[:id]}")

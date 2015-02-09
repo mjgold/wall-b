@@ -3,19 +3,29 @@
   <link rel="stylesheet" type="text/css" href="/wall_b.css">
 </head>
 
-<h2><%= wall.title %></h2>
-<h3><%= wall.description %></h3>
-<h4><%= wall.likes %> likes</h4>
-<p/>
 <% wall.errors.map do |error| %>
   <%= error %>
 <% end %>
+
+<h2><%= wall.title %></h2>
+<h3><%= wall.description %></h3>
+<h4><%= wall.likes %> likes</h4>
+
+# WHY PUTTING ARRAY?
+<h4><%= wall.posts.map { |post| post.text if post.text != nil } if wall.posts.any? %>
+<p/>
 
 <br>
 
 <form id="like" action='/walls/<%= wall.id %>' method='POST'>
   <input type='hidden' name='_method' value='put'>
   <input type='submit' name='wall[like]' value='Like'>
+</form>
+
+<form id="message" action='/walls/<%= wall.id %>' method='POST'>
+  <input type='hidden' name='_method' value='put'>
+  <input type='text' name='wall[post_text]' placeholder="Enter post">
+  <input type='submit' value='Post'>
 </form>
 
 <form id="edit" action='/walls/<%= wall.id %>/edit' method='GET'>
