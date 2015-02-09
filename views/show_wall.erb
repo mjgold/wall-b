@@ -1,7 +1,4 @@
-<html>
-<head>
-  <link rel="stylesheet" type="text/css" href="/wall_b.css">
-</head>
+<%= erb :header, locals: { title: wall.title } %>
 
 <% wall.errors.map do |error| %>
   <%= error %>
@@ -11,24 +8,30 @@
 <h3><%= wall.description %></h3>
 <h4><%= wall.likes %> likes</h4>
 
+<form id="like" action='/walls/<%= wall.id %>' method='POST'>
+  <input type='hidden' name='_method' value='put'>
+  <button type='submit' name='wall_like' value='true'>Like wall</button>
+</form>
+
+<br>
 <h3><u>Posts</u></h3>
+
+<form name='message_like' action='/walls/<%= wall.id %>' method='POST'>
+
 <% wall.posts.each do |post| %>
-<h4><%= post.text if post.text != nil %></h4>
+  <h4><%= post.text if post.text != nil %>
+    <button type='submit' name='post_like' value='<%= post.id %>'>Like</button>
+  </h4>
 <% end %>
 
-<p/>
+</form>
 
 <br>
 
-<form id="like" action='/walls/<%= wall.id %>' method='POST'>
-  <input type='hidden' name='_method' value='put'>
-  <input type='submit' name='wall[like]' value='Like'>
-</form>
-
 <form id="message" action='/walls/<%= wall.id %>' method='POST'>
   <input type='hidden' name='_method' value='put'>
-  <input type='text' name='wall[post_text]' placeholder="Enter post">
-  <input type='submit' value='Post'>
+  <input type='text' name='wall_post]' placeholder="Enter post">
+  <button type='submit' value='Post'>Post</button>
 </form>
 
 <form id="edit" action='/walls/<%= wall.id %>/edit' method='GET'>
@@ -43,4 +46,5 @@
 </form>
 
 <a href="/">Back to all walls</a>
-</html>
+
+<%= erb :footer %>

@@ -1,3 +1,5 @@
+<%= erb :header %>
+
 <ul>
 <% walls.each() do |wall| %>
   <li><a href='/walls/<%= wall.id %>'><%= wall.title %></a></li>
@@ -5,3 +7,5 @@
 </ul>
 
 <a href="/walls/new">Add Your Own Wall</a>
+
+<%= erb :footer %>

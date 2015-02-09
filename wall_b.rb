@@ -144,7 +144,6 @@ get('/walls/:id') do
 end
 
 post('/walls') do
-  puts params
   wall_attributes = params.fetch('wall')
   # We'll get the starting attributes for this wall from `params` that came in
   # from `views/new_wall.erb`
@@ -182,24 +181,30 @@ put('/walls/:id') do
   wall = Wall.get(params[:id])
   puts params
 
-  wall.likes += 1 if params[:wall][:like]
+  # Handle wall main attribute updates
+  if wall_params = params[:wall]
+    puts wall_params
+    wall.attributes = wall_params
+  end
 
-  if post_text = params[:wall][:post_text]
-    puts "wall id: #{wall.id}"
-    puts "wall text: #{post_text}"
+  # Handle wall likes
+  wall.likes += 1 if params[:wall_like]
 
+  # Handle wall posts
+  if post_text = params[:wall_post]
     Post.create(wall_id: wall.id, text: post_text)
   end
 
+  # Check for errors
   saved = wall.save
   wall.errors[:general] = "Edit failed" unless saved
+
   redirect("walls/#{params[:id]}")
 end
 
 delete('/walls/:id') do
   wall = Wall.get(params[:id])
   if params[:wall][:created_by] == wall.created_by
-    wall.destroy
     redirect('/')
   else
     wall.errors[:general] = "You can only delete a wall by entering the name of the wall's creator."
