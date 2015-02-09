@@ -11,8 +11,11 @@
 <h3><%= wall.description %></h3>
 <h4><%= wall.likes %> likes</h4>
 
-# WHY PUTTING ARRAY?
-<h4><%= wall.posts.map { |post| post.text if post.text != nil } if wall.posts.any? %>
+<h3><u>Posts</u></h3>
+<% wall.posts.each do |post| %>
+<h4><%= post.text if post.text != nil %></h4>
+<% end %>
+
 <p/>
 
 <br>
