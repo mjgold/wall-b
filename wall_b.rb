@@ -86,6 +86,7 @@ class Post
   property :id,       Serial
   property :wall_id,  Integer
   property :text,     String
+  property :likes,    Integer, default: 0
 
   belongs_to :wall
 
@@ -182,10 +183,7 @@ put('/walls/:id') do
   puts params
 
   # Handle wall main attribute updates
-  if wall_params = params[:wall]
-    puts wall_params
-    wall.attributes = wall_params
-  end
+  wall.attributes = params[:wall] if params[:wall]
 
   # Handle wall likes
   wall.likes += 1 if params[:wall_like]
@@ -199,7 +197,14 @@ put('/walls/:id') do
     end
   end
 
-  ### SAVING REMOVES ERRORS HASH, ask stack overflow how to fix
+  # Handle post likes
+  puts "Post_like: #{params[:post_like]}"
+  if post_like = params[:post_like]
+    post = Post.get(post_like)
+    post.likes += 1
+    post.save
+  end
+
   saved = wall.save unless wall.errors.any?
 
   body(erb(:show_wall, locals: { wall: wall }))

@@ -24,6 +24,9 @@
   <h4><%= post.text if post.text != nil %>
     <button type='submit' name='post_like' value='<%= post.id %>'>Like</button>
   </h4>
+  <h5><%= post.likes if post.likes > 0 %> likes</h5>
+    <input type='hidden' name='_method' value='put'>
+  </h4>
 <% end %>
 
 </form>
