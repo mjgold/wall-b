@@ -8,7 +8,7 @@
 
 <h2><%= wall.title %></h2>
 <h3><%= wall.description %></h3>
-<h4><%= wall.likes %> likes</h4>
+<h4><%= wall_likes(wall) %></h4>
 
 <form id="like" action='/walls/<%= wall.id %>' method='POST'>
   <input type='hidden' name='_method' value='put'>
@@ -19,16 +19,14 @@
 <h3><u>Posts</u></h3>
 
 <form name='message_like' action='/walls/<%= wall.id %>' method='POST'>
+  <input type='hidden' name='_method' value='put'>
 
-<% wall.posts.each do |post| %>
-  <h4><%= post.text if post.text != nil %>
-    <button type='submit' name='post_like' value='<%= post.id %>'>Like</button>
-  </h4>
-  <h5><%= post.likes if post.likes > 0 %> likes</h5>
-    <input type='hidden' name='_method' value='put'>
-  </h4>
-<% end %>
-
+  <% wall.posts.each do |post| %>
+    <h4><%= post.text if post.text != nil %>
+      <button type='submit' name='liked_post' value='<%= post.id %>'>Like</button>
+    </h4>
+    <%= "<h5> #{post.likes} likes </h5>" if post.likes > 0 %>
+  <% end %>
 </form>
 
 <br>
@@ -45,8 +43,8 @@
 </form>
 
 <form id="destroy" action='/walls/<%= wall.id %>' method='POST'>
-  <input type='text' name='wall[created_by]' placeholder="Enter creator's name">
   <input type='hidden' name='_method' value='delete'>
+  <input type='text' name='wall[created_by]' placeholder="Enter creator's name">
   <button type='submit'>Destroy this wall</button>
 </form>
 

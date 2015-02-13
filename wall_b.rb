@@ -18,7 +18,6 @@ end
 # configuration in production us just because we included the `pg` gem in our
 # Gemfile. HOORAY!
 
-
 # Below, we're defining a custom `datatype` to represent a `Wall`. Custom data
 # types that represent the problem domain you're working in are called `models`.
 
@@ -90,10 +89,10 @@ class Post
 
   belongs_to :wall
 
-  # def initialize(wall_id, text)
-  #   @wall_id = wall_id
-  #   @text = text
-  # end
+  def like!
+    self.likes += 1
+    save
+  end
 end
 
 # PHEW! That's a lot of new ideas! But don't worry; you'll get it! Understanding
@@ -162,7 +161,7 @@ post('/walls') do
     redirect('/')
     # If we successfuly create the wall, let's send the user back home.
   else
-    body(erb(:new_wall), { :locals => { :wall => wall } })
+    body(erb(:new_wall), locals: { wall: wall })
     # If we *can't* create the wall; We'll redisplay the form so the user can
     # fix any errors.
   end
@@ -198,15 +197,12 @@ put('/walls/:id') do
   end
 
   # Handle post likes
-  puts "Post_like: #{params[:post_like]}"
-  if post_like = params[:post_like]
-    post = Post.get(post_like)
-    post.likes += 1
-    post.save
+  if liked_post = params[:liked_post]
+    Post.get(liked_post).like!
   end
 
-  saved = wall.save unless wall.errors.any?
-
+  wall.save
+  
   body(erb(:show_wall, locals: { wall: wall }))
 end
 
@@ -223,5 +219,9 @@ end
 helpers do
   def post_or_put_route(object, prefix)
     object.new? ? prefix : prefix + "/#{object.id}"
+  end
+
+  def wall_likes(wall)
+    "<h4>#{wall.likes} likes</h4>" if wall.likes > 0
   end
 end
